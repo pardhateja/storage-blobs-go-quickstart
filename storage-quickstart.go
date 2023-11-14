@@ -8,7 +8,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/Azure/azure-sdk-for-go/sdk/storage/azblob"
 )
 
@@ -33,13 +32,21 @@ func main() {
 	fmt.Printf("Azure Blob storage quick start sample\n")
 
 	// TODO: replace <storage-account-name> with your actual storage account name
-	url := "https://<storage-account-name>.blob.core.windows.net/"
+	// url := "https://<storage-account-name>.blob.core.windows.net/"
 	ctx := context.Background()
 
-	credential, err := azidentity.NewDefaultAzureCredential(nil)
+	// credential, err := azidentity.NewDefaultAzureCredential(nil)
+	// handleError(err)
+
+	// client, err := azblob.NewClient(url, credential, nil)
+	// handleError(err)
+	accountName := "pardhateja"
+	accountKey := ""
+	cred, err := azblob.NewSharedKeyCredential(accountName, accountKey)
 	handleError(err)
 
-	client, err := azblob.NewClient(url, credential, nil)
+	// The service URL for blob endpoints is usually in the form: http(s)://<account>.blob.core.windows.net/
+	client, err := azblob.NewClientWithSharedKeyCredential(fmt.Sprintf("https://%s.blob.core.windows.net/", accountName), cred, nil)
 	handleError(err)
 
 	// Create the container
